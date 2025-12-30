@@ -210,18 +210,22 @@
 
 # Main Menu
 
-# 
+![Main Menu](docs/screenshots/main-menu.png)
+
 
 # Evidence Collection (Event Logs + Snapshot)
 
-# 
+![Evidence Collection](docs/screenshots/collection.png)
+
 
 # Session Analysis Results (Findings)
 
-# 
+![Analysis Results](docs/screenshots/analysis-findings.png)
+
 
 # Detailed Findings Output
 
+![Detailed Findings](docs/screenshots/detailed-findings.png)
 
 
 # ---
