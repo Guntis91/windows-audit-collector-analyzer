@@ -1,250 +1,191 @@
-# \# Windows Audit Collector + Analyzer (PowerShell 5.1 / Server 2022)
+# Windows Audit Collector + Analyzer (PowerShell 5.1 / Server 2022)
 
-# 
+A menu-driven PowerShell tool that \*\*collects Windows logs + system evidence\*\*, saves it into a \*\*timestamped session folder\*\*, then \*\*analyzes the session\*\* to highlight suspicious activity and important admin/security events.
 
-# A menu-driven PowerShell tool that \*\*collects Windows logs + system evidence\*\*, saves it into a \*\*timestamped session folder\*\*, then \*\*analyzes the session\*\* to highlight suspicious activity and important admin/security events.
+### This tool is designed for:
+- Lab learning
+- Intermediate SOC / analyst practice
+- Portfolio demonstration
+- Fast auditing without manually digging through Event Viewer
 
-# 
 
-# This tool is designed for:
+---
 
-# \- Lab learning
 
-# \- Intermediate SOC / analyst practice
+## What This Tool Does
 
-# \- Portfolio demonstration
+### 1) Collect Evidence (Creates an Audit Session)
 
-# \- Fast auditing without manually digging through Event Viewer
+When you run a collection, the tool creates a folder like:
 
-# 
+`C:\\AdminToolkit\\AuditSessions\\2025-12-29\_15-37-58\\`
 
-# ---
+Inside it, it saves:
 
-# 
+Event Logs (exported from Event Viewer as CSV):
 
-# \## What This Tool Does
+- `EventLogs\\Security.csv`
 
-# 
+- `EventLogs\\System.csv`
 
-# \### 1) Collect Evidence (Creates an Audit Session)
+- `EventLogs\\Application.csv`
 
-# When you run a collection, the tool creates a folder like:
+System Snapshot (current system state at collection time):
 
-# 
+- `Snapshot\\ComputerInfo.txt`
 
-# `C:\\AdminToolkit\\AuditSessions\\2025-12-29\_15-37-58\\`
+- `Snapshot\\IpConfig.txt`
 
-# 
+- `Snapshot\\TcpConnections.txt`
 
-# Inside it, it saves:
+- `Snapshot\\ListeningPorts.txt`
 
-# 
+- `Snapshot\\Services.csv`
 
-# Event Logs (exported from Event Viewer as CSV):
+- `Snapshot\\FirewallRules.csv`
 
-# \- `EventLogs\\Security.csv`
 
-# \- `EventLogs\\System.csv`
+---
 
-# \- `EventLogs\\Application.csv`
 
-# 
+### 2) Analyze Session (Detects Suspicious Patterns)
 
-# System Snapshot (current system state at collection time):
+The tool analyzes the session files and produces reports:
 
-# \- `Snapshot\\ComputerInfo.txt`
+- `Analysis\\Findings.csv` (structured findings, easy for Excel)
 
-# \- `Snapshot\\IpConfig.txt`
+- `Analysis\\Summary.txt` (simple summary)
 
-# \- `Snapshot\\TcpConnections.txt`
+- `Analysis\\Findings-Detailed.txt` (exact event evidence: file + time + event ID + message snippet)
 
-# \- `Snapshot\\ListeningPorts.txt`
 
-# \- `Snapshot\\Services.csv`
 
-# \- `Snapshot\\FirewallRules.csv`
+The analyzer focuses on common intermediate audit tasks, such as:
 
-# 
+- Failed logons (4625) with a configurable threshold (default: 3)
 
-# ---
+- RDP logons (4624 Logon Type 10)
 
-# 
+- Account lockouts (4740)
 
-# \### 2) Analyze Session (Detects Suspicious Patterns)
+- New users created (4720)
 
-# The tool analyzes the session files and produces reports:
+- Group membership changes (4728 / 4732 / 4756)
 
-# 
+- Scheduled task created (4698, if enabled)
 
-# \- `Analysis\\Findings.csv` (structured findings, easy for Excel)
+- Unexpected shutdown events (1076 / 6008)
 
-# \- `Analysis\\Summary.txt` (simple summary)
+- New service installs (7045)
 
-# \- `Analysis\\Findings-Detailed.txt` (exact event evidence: file + time + event ID + message snippet)
+- Service failures (Warning/Error/Critical)
 
-# 
+- Application crash/error events
+ 
+---
 
-# The analyzer focuses on common intermediate audit tasks, such as:
+## Requirements
 
-# \- Failed logons (4625) with a configurable threshold (default: 3)
 
-# \- RDP logons (4624 Logon Type 10)
+- Windows Server 2022 (or Windows 10/11)
 
-# \- Account lockouts (4740)
+- PowerShell 5.1 (default on Server 2022)
 
-# \- New users created (4720)
+- Run PowerShell as Administrator (recommended for Security logs)
 
-# \- Group membership changes (4728 / 4732 / 4756)
 
-# \- Scheduled task created (4698, if enabled)
+---
 
-# \- Unexpected shutdown events (1076 / 6008)
 
-# \- New service installs (7045)
+## How to Run
 
-# \- Service failures (Warning/Error/Critical)
 
-# \- Application crash/error events
+### Step 1) Open PowerShell as Administrator
 
-# 
+- Start menu
 
-# ---
+- Search \*\*PowerShell\*\*
 
-# 
+- Right-click → \*\*Run as Administrator\*\*
 
-# \## Requirements
 
-# 
+### Step 2) Allow script execution for this session only
 
-# \- Windows Server 2022 (or Windows 10/11)
+```powershell
 
-# \- PowerShell 5.1 (default on Server 2022)
+Set-ExecutionPolicy -Scope Process Bypass -Force
 
-# \- Run PowerShell as Administrator (recommended for Security logs)
+```
 
-# 
+### Step 3) Run the script
 
-# ---
 
-# 
+Example:
 
-# \## How to Run
+```powershell
 
-# 
+cd D:\\Github\\windows-audit-collector-analyzer
 
-# \### Step 1) Open PowerShell as Administrator
+.\\Audit-Collector-Analyzer.ps1
 
-# \- Start menu
+```
 
-# \- Search \*\*PowerShell\*\*
+---
 
-# \- Right-click → \*\*Run as Administrator\*\*
 
-# 
+## Output Locations
 
-# \### Step 2) Allow script execution for this session only
+By default, sessions are stored in:
 
-# ```powershell
+C:\\AdminToolkit\\AuditSessions\\
 
-# Set-ExecutionPolicy -Scope Process Bypass -Force
+Each collection creates a new timestamped folder:
 
-# ```
+C:\\AdminToolkit\\AuditSessions\\<timestamp>\\
 
+&nbsp; EventLogs\\
 
+&nbsp; Snapshot\\
 
-# \### Step 3) Run the script
+&nbsp; Analysis\\
 
-# 
 
-# Example:
+---
 
-# ```powershell
+## Screenshots
 
-# cd D:\\Github\\windows-audit-collector-analyzer
+Below are example screenshots from a lab environment.
 
-# .\\Audit-Collector-Analyzer.ps1
-
-# ```
-
-# ---
-
-
-
-# \## Output Locations
-
-# 
-
-# By default, sessions are stored in:
-
-# 
-
-# C:\\AdminToolkit\\AuditSessions\\
-
-# 
-
-# Each collection creates a new timestamped folder:
-
-# 
-
-# C:\\AdminToolkit\\AuditSessions\\<timestamp>\\
-
-# &nbsp; EventLogs\\
-
-# &nbsp; Snapshot\\
-
-# &nbsp; Analysis\\
-
-
-
-# ---
-
-
-
-# \## Screenshots
-
-# 
-
-# Below are example screenshots from a lab environment.
-
-# 
-
-# Main Menu
+### Main Menu
 
 ![Main Menu](docs/screenshots/main-menu.png)
 
 
-# Evidence Collection (Event Logs + Snapshot)
+### Evidence Collection (Event Logs + Snapshot)
 
 ![Evidence Collection](docs/screenshots/collection.png)
 
 
-# Session Analysis Results (Findings)
+### Session Analysis Results (Findings)
 
 ![Analysis Results](docs/screenshots/analysis-findings.png)
 
 
-# Detailed Findings Output
+### Detailed Findings Output
 
 ![Detailed Findings](docs/screenshots/detailed-findings.png)
 
 
-# ---
+---
 
 
+## Notes
 
-# \## Notes
+This tool is read-only (it does not change system configuration).
 
-# 
+It is designed to help you quickly find important events without manually searching through Event Viewer.
 
-* # This tool is read-only (it does not change system configuration).
-
-# 
-
-* # It is designed to help you quickly find important events without manually searching through Event Viewer.
-
-# 
-
-* # Findings are based on pattern detection and thresholds. A clean report does not guarantee the system is clean.
+Findings are based on pattern detection and thresholds. A clean report does not guarantee the system is clean.
 
 
 
