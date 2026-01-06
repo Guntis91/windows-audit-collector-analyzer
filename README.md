@@ -1,6 +1,6 @@
 # Windows Audit Collector + Analyzer (PowerShell 5.1 / Server 2022)
 
-A menu-driven PowerShell tool that \*\*collects Windows logs + system evidence\*\*, saves it into a \*\*timestamped session folder\*\*, then \*\*analyzes the session\*\* to highlight suspicious activity and important admin/security events.
+A menu-driven PowerShell tool that **collects Windows logs + system evidence**, saves it into a **timestamped session folder**, then **analyzes the session** to highlight suspicious activity and important admin/security events.
 
 ### This tool is designed for:
 - Lab learning
@@ -24,25 +24,25 @@ Inside it, it saves:
 
 Event Logs (exported from Event Viewer as CSV):
 
-- `EventLogs\\Security.csv`
+- `EventLogs\Security.csv`
 
-- `EventLogs\\System.csv`
+- `EventLogs\System.csv`
 
-- `EventLogs\\Application.csv`
+- `EventLogs\Application.csv`
 
 System Snapshot (current system state at collection time):
 
-- `Snapshot\\ComputerInfo.txt`
+- `Snapshot\ComputerInfo.txt`
 
-- `Snapshot\\IpConfig.txt`
+- `Snapshot\IpConfig.txt`
 
-- `Snapshot\\TcpConnections.txt`
+- `Snapshot\TcpConnections.txt`
 
-- `Snapshot\\ListeningPorts.txt`
+- `Snapshot\ListeningPorts.txt`
 
-- `Snapshot\\Services.csv`
+- `Snapshot\Services.csv`
 
-- `Snapshot\\FirewallRules.csv`
+- `Snapshot\FirewallRules.csv`
 
 
 ---
@@ -52,11 +52,11 @@ System Snapshot (current system state at collection time):
 
 The tool analyzes the session files and produces reports:
 
-- `Analysis\\Findings.csv` (structured findings, easy for Excel)
+- `Analysis\Findings.csv` (structured findings, easy for Excel)
 
-- `Analysis\\Summary.txt` (simple summary)
+- `Analysis\Summary.txt` (simple summary)
 
-- `Analysis\\Findings-Detailed.txt` (exact event evidence: file + time + event ID + message snippet)
+- `Analysis\Findings-Detailed.txt` (exact event evidence: file + time + event ID + message snippet)
 
 
 
@@ -104,9 +104,9 @@ The analyzer focuses on common intermediate audit tasks, such as:
 
 - Start menu
 
-- Search \*\*PowerShell\*\*
+- Search **PowerShell**
 
-- Right-click → \*\*Run as Administrator\*\*
+- Right-click → **Run as Administrator**
 
 
 ### Step 2) Allow script execution for this session only
@@ -124,9 +124,9 @@ Example:
 
 ```powershell
 
-cd D:\\Github\\windows-audit-collector-analyzer
+cd D:\Github\windows-audit-collector-analyzer
 
-.\\Audit-Collector-Analyzer.ps1
+.\Audit-Collector-Analyzer.ps1
 
 ```
 
@@ -137,17 +137,17 @@ cd D:\\Github\\windows-audit-collector-analyzer
 
 By default, sessions are stored in:
 
-C:\\AdminToolkit\\AuditSessions\\
+C:\AdminToolkit\AuditSessions\
 
 Each collection creates a new timestamped folder:
 
-C:\\AdminToolkit\\AuditSessions\\<timestamp>\\
+C:\AdminToolkit\AuditSessions\<timestamp>\
 
-&nbsp; EventLogs\\
+&nbsp; EventLogs\
 
-&nbsp; Snapshot\\
+&nbsp; Snapshot\
 
-&nbsp; Analysis\\
+&nbsp; Analysis\
 
 
 ---
