@@ -18,7 +18,7 @@ A menu-driven PowerShell tool that **collects Windows logs + system evidence**, 
 
 When you run a collection, the tool creates a folder like:
 
-`C:\\AdminToolkit\\AuditSessions\\2025-12-29\_15-37-58\\`
+`C:\AdminToolkit\AuditSessions\2025-12-29_15-37-58\`
 
 Inside it, it saves:
 
